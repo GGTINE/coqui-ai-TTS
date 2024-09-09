@@ -1,7 +1,9 @@
 ## 설치 지침
 
 우분투 20.04 ~ 24.04와 파이썬 3.9와 3.10 에서 테스트 해보았습니다.  
+  
 원문에 따르면 3.12까지 동작한다고 합니다.  
+  
 ※ 윈도우 환경에서 테스트해보지 않았습니다. [here](https://stackoverflow.com/questions/66726331/how-can-i-run-mozilla-tts-coqui-tts-training-with-cuda-on-a-windows-system) 를 참고하여 테스트 할 수 있습니다.  
 
 학습 없이 `한국어` tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
@@ -106,7 +108,9 @@ CUDA_VISIBLE_DEVICE="0, 1, 2, 3' python -m trainer.distribute --script main.py
 
 ## 학습된 모델을 통한 TTS 생성
 ※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력  
+  
 ※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja']  
+  
 ※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됨  
 ```bash
 $ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav
