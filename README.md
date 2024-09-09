@@ -105,8 +105,8 @@ CUDA_VISIBLE_DEVICE="0, 1, 2, 3' python -m trainer.distribute --script main.py
 ```
 
 ## 학습된 모델을 통한 TTS 생성
-※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력
-※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja']
+※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력.
+※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja'].
 ※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됨.
 ```bash
 $ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav
