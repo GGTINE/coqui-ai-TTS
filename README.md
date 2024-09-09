@@ -1,4 +1,118 @@
+## 설치 지침
 
+우분투 20.04 ~ 24.04와 파이썬 3.9와 3.10 에서 테스트 해보았습니다.
+원문에 따르면 3.12까지 동작한다고 합니다.
+※ 윈도우 환경에서 테스트해보지 않았습니다. [here](https://stackoverflow.com/questions/66726331/how-can-i-run-mozilla-tts-coqui-tts-training-with-cuda-on-a-windows-system) 를 참고하여 테스트 할 수 있습니다.
+
+학습 없이 `한국어` tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
+```bash
+$ pip install coqui-tts[ko]
+```
+
+모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
+```bash
+$ git clone https://github.com/GGTINE/coqui-ai-TTS.git
+$ cd coqui-ai-TTS
+$ pip install -e .[ko]
+```
+
+## 선택적 종속성
+원문에 따르면 setup.py 를 설치할 때 선택적 종속성을 부여할 수 있습니다.
+
+다음 추가 기능을 통해 선택적 종속성을 설치할 수 있습니다:
+
+| 이름 | 설명 |
+|------|-------------|
+| `all` | `dev`와 `docs` 를 제외한 모든 선택적 종속성 |
+| `ko` | 한국어 [추천] |
+| `dev` | 개발 종속성 |
+| `docs` | 문서 작성을 위한 종속성 |
+| `notebooks` | 주피터 노트북에서만 사용되는 종속성 |
+| `server` | TTS 서버를 실행하기 위한 종속성 |
+| `bn` | 방글라데시어 |
+| `ja` | 일본어 |
+| `zh` | 중국어 |
+| `languages` | 모든 언어별 종속성 |
+
+아래 명령어를 통해 추가 기능을 설치할 수 있습니다.:
+
+```bash
+$ pip install coqui-tts[server,ja]
+$ pip install -e .[server,ja]
+```
+
+## YouTube 영상 사용 시
+`pytubefix` 패키지를 통해 유튜브 영상(음성만, *.mp3)을 다운로드 하여 사용할 수 있습니다.
+```python
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
+
+yt = YouTube('YouTube link', on_progree_callback=on_progress)
+ys = yt.streams.get_audio_only()
+
+# filename 미지정 시 YouTube 영상 제목으로 다운로드 됨.
+ys.download(mp3=True, filename='filename')
+```
+
+## 데이터셋 폴더 구성 (LJSpeech 구성과 동일)
+```
+|- dataset_name       (데이터셋 명)
+|- metadata.txt/           (audio1|안녕하세요.|안녕하세요.)
+|- wavs
+    |- audio1.wav/             (음성 파일)
+    |- ...
+```
+
+## 전처리
+STT 모델인 `OpenAI Whisper` 모델을 활용하여 오디오 분할 및 학습용 데이터를 생성합니다.
+```python
+import whisper
+import subprocess
+
+# load_model의 파라미터는 모델 크기를 의미합니다.
+model = whisper.load_model('small')
+
+# mp3 파일을 읽고 STT를 진행합니다.
+result = model.transcribe('filename.mp3)
+
+# 학습 데이터 생성을 위해 audio.wav와 metadata.txt를 생성합니다.
+for i, r in enumerate(result['segments']):
+    ffmpeg_command = [
+        'ffmpeg', '-y', '-i', 'iu.mp3',
+        '-ss', str(r["start"]),
+        '-to', str(r["end"]),
+        '-hide_banner', '-loglevel', 'error',
+        f'path/to/audio{i+1}.wav'
+    ]
+
+    subprocess.run(ffmpeg_command)
+
+with open("path/to/metadata.txt", "w", encoding="utf-8") as f:
+    for i, r in enumerate(result['segments']):
+        f.write(f"audio{i+1}|{r['text'].strip()}|{r['text'].strip()}\n")
+```
+
+## Fine-tuning
+#### 단일 GPU 일 때
+```bash
+$ python main.py
+```
+
+#### 다중 GPU 일 때
+```bash
+# 다중 gpu 일 때
+CUDA_VISIBLE_DEVICE="0, 1, 2, 3' python -m trainer.distribute --script main.py
+```
+
+## 학습된 모델을 통한 TTS 생성
+※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력
+※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja']
+※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됨.
+```bash
+$ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav
+```
+
+```==== Origianl ====```
 ## 🐸Coqui TTS News
 - 📣 Fork of the [original, unmaintained repository](https://github.com/coqui-ai/TTS). New PyPI package: [coqui-tts](https://pypi.org/project/coqui-tts)
 - 📣 ⓍTTSv2 is here with 16 languages and better performance across the board.
