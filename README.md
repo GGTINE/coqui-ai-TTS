@@ -81,7 +81,7 @@ result = model.transcribe('filename.mp3)
 # 학습 데이터 생성을 위해 audio.wav와 metadata.txt를 생성합니다.
 for i, r in enumerate(result['segments']):
     ffmpeg_command = [
-        'ffmpeg', '-y', '-i', 'iu.mp3',
+        'ffmpeg', '-y', '-i', 'filename.mp3',
         '-ss', str(r["start"]),
         '-to', str(r["end"]),
         '-hide_banner', '-loglevel', 'error',
