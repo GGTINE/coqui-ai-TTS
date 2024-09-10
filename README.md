@@ -123,6 +123,10 @@ ex) tts --text "안녕하세요."
       \--language_idx ko  
       \--speaker_wav /home/user/coqui-ai-TTS/datasets/karina/wavs/audio85.wav 
 
+## KSS (Korean Single Speaker) dataset pre-trained model
+추가 예정  
+Goolgle Drive [here]
+
 ## Original
 ## 🐸Coqui TTS News
 - 📣 Fork of the [original, unmaintained repository](https://github.com/coqui-ai/TTS). New PyPI package: [coqui-tts](https://pypi.org/project/coqui-tts)
