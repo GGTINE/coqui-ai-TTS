@@ -6,15 +6,16 @@
   
 ※ 윈도우 환경에서 테스트해보지 않았습니다. [here](https://stackoverflow.com/questions/66726331/how-can-i-run-mozilla-tts-coqui-tts-training-with-cuda-on-a-windows-system) 를 참고하여 테스트 할 수 있습니다.  
 
-학습 없이 `한국어` tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
+학습 없이 tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
 ```bash
-$ pip install coqui-tts[ko]
+$ pip install coqui-tts
 ```
 
-모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
+`한국어` tts 생성을 위해 모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
 ```bash
 $ git clone https://github.com/GGTINE/coqui-ai-TTS.git
 $ cd coqui-ai-TTS
+$ pip install coqui-tts[ko]
 $ pip install -e .[ko]
 ```
 
@@ -58,11 +59,11 @@ ys.download(mp3=True, filename='filename')
 
 ## 데이터셋 폴더 구성 (LJSpeech 구성과 동일)
 ```
-|- dataset_name       (데이터셋 명)
-|- metadata.txt/           (audio1|안녕하세요.|안녕하세요.)
-|- wavs
-    |- audio1.wav/             (음성 파일)
-    |- ...
+|- dataset_name       (데이터셋 이름)
+  |- metadata.txt/           (audio1|안녕하세요.|안녕하세요.)
+  |- wavs
+      |- audio1.wav/             (음성 파일)
+      |- ...
 ```
 
 ## 전처리
@@ -80,7 +81,7 @@ result = model.transcribe('filename.mp3)
 # 학습 데이터 생성을 위해 audio.wav와 metadata.txt를 생성합니다.
 for i, r in enumerate(result['segments']):
     ffmpeg_command = [
-        'ffmpeg', '-y', '-i', 'iu.mp3',
+        'ffmpeg', '-y', '-i', 'filename.mp3',
         '-ss', str(r["start"]),
         '-to', str(r["end"]),
         '-hide_banner', '-loglevel', 'error',
@@ -103,20 +104,30 @@ $ python main.py
 #### 다중 GPU 일 때
 ```bash
 # 다중 gpu 일 때
-CUDA_VISIBLE_DEVICE="0, 1, 2, 3' python -m trainer.distribute --script main.py
+CUDA_VISIBLE_DEVICES="0, 1, 2, 3" python -m trainer.distribute --script main.py
 ```
 
 ## 학습된 모델을 통한 TTS 생성
-※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력  
+※ model_path로 입력시 해당 폴더 내에 model.pth로 자동 입력됩니다.  
   
 ※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja']  
   
-※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됨  
+※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됩니다.  
 ```bash
 $ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav
 ```
+ex) tts --text "안녕하세요."  
+      \--model_path /home/user/coqui-ai-TTS/run/training/karina/  
+      \--config /home/user/coqui-ai-TTS/run/training/karina/config.json  
+      \--out_path /home/user/output.wav  
+      \--language_idx ko  
+      \--speaker_wav /home/user/coqui-ai-TTS/datasets/karina/wavs/audio85.wav 
 
-## Origianl
+## KSS (Korean Single Speaker) dataset pre-trained model
+추가 예정  
+Goolgle Drive [here]
+
+## Original
 ## 🐸Coqui TTS News
 - 📣 Fork of the [original, unmaintained repository](https://github.com/coqui-ai/TTS). New PyPI package: [coqui-tts](https://pypi.org/project/coqui-tts)
 - 📣 ⓍTTSv2 is here with 16 languages and better performance across the board.
