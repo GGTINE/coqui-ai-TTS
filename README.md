@@ -112,6 +112,7 @@ CUDA_VISIBLE_DEVICES="0, 1, 2, 3" python -m trainer.distribute --script main.py
 ※ language_idx는 ['en', 'es', 'fr', ... 'ko', 'zh-cn', 'ja']  
   
 ※ speaker_wav는 TTS 생성 시 사용하고 싶은 목소리 사용. 학습한 목소리로 사용한다면 학습 데이터 중 사용하면 됩니다.  
+ex) tts --text "안녕하세요." --model_path /home/user/coqui-ai-TTS/run/training/karina/ --config /home/user/coqui-ai-TTS/run/training/karina/config.json --out_path /home/user/output.wav --language_idx ko --speaker_wav /home/user/coqui-ai-TTS/datasets/karina/wavs/audio85.wav
 ```bash
 $ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav
 ```
