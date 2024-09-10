@@ -103,7 +103,6 @@ $ python main.py
 
 #### 다중 GPU 일 때
 ```bash
-# 다중 gpu 일 때
 CUDA_VISIBLE_DEVICES="0, 1, 2, 3" python -m trainer.distribute --script main.py
 ```
 
