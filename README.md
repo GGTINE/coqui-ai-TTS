@@ -122,6 +122,11 @@ ex) tts --text "안녕하세요."
       \--language_idx ko  
       \--speaker_wav /home/user/coqui-ai-TTS/datasets/karina/wavs/audio85.wav 
 
+### TTS 생성 시 GPU 활용
+```bash
+$ tts --text "입력 텍스트" --model_path /path/to/model --config /path/to/config.json --out_path /path/to/output.wav --language_idx ko --speaker_wav /path/to/audio_refer.wav --use_cuda True
+```
+
 ## KSS (Korean Single Speaker) dataset pre-trained model
 추가 예정  
 Goolgle Drive [here]
