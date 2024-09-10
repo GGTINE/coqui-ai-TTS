@@ -6,15 +6,16 @@
   
 ※ 윈도우 환경에서 테스트해보지 않았습니다. [here](https://stackoverflow.com/questions/66726331/how-can-i-run-mozilla-tts-coqui-tts-training-with-cuda-on-a-windows-system) 를 참고하여 테스트 할 수 있습니다.  
 
-학습 없이 `한국어` tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
+학습 없이 tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
 ```bash
-$ pip install coqui-tts[ko]
+$ pip install coqui-tts
 ```
 
-모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
+`한국어` tts 생성을 위해 모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
 ```bash
 $ git clone https://github.com/GGTINE/coqui-ai-TTS.git
 $ cd coqui-ai-TTS
+$ pip install coqui-tts[ko]
 $ pip install -e .[ko]
 ```
 
