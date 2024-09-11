@@ -46,6 +46,9 @@ $ pip install -e .[server,ja]
 
 ## YouTube 영상 사용 시
 `pytubefix` 패키지를 통해 유튜브 영상(음성만, *.mp3)을 다운로드 하여 사용할 수 있습니다.
+```bash
+$ pip install pytubefix
+```
 ```python
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
@@ -68,6 +71,9 @@ ys.download(mp3=True, filename='filename')
 
 ## 전처리
 STT 모델인 `OpenAI Whisper` 모델을 활용하여 오디오 분할 및 학습용 데이터를 생성합니다.
+```bash
+$ pip install openai-whisper
+```
 ```python
 import whisper
 import subprocess
