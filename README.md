@@ -8,14 +8,14 @@
 
 학습 없이 tts 생성만 한다면 pip를 통해 `coqui-tts` 패키지만 설치하여 아래 Command-line `tts` 스크립트를 실행하면 됩니다.
 ```bash
-$ pip install coqui-tts
+$ pip install TTS coqui-tts
 ```
 
 `한국어` tts 생성을 위해 모델을 수정하거나 학습할 계획이라면 해당 🐸TTS repository를 복제하여 로컬에 설치해야합니다.
 ```bash
 $ git clone https://github.com/GGTINE/coqui-ai-TTS.git
 $ cd coqui-ai-TTS
-$ pip install coqui-tts[ko]
+$ pip install TTS coqui-tts[ko]
 $ pip install -e .[ko]
 ```
 
